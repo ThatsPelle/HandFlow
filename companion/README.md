@@ -19,4 +19,4 @@ npm run desktop:publish
 
 Output:
 
-`dist-desktop\HandFlow\HandFlow.Companion.exe`
+`release\HandFlow-win-x64\HandFlow.Companion.exe`

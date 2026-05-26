@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "clean:desktop": "powershell -NoProfile -Command \"Remove-Item dist,dist-desktop -Recurse -Force -ErrorAction SilentlyContinue\"",
+    "clean:desktop": "powershell -NoProfile -Command \"Remove-Item dist,dist-desktop,release -Recurse -Force -ErrorAction SilentlyContinue\"",
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "desktop:publish": "npm run build && dotnet publish companion/HandFlow.Companion/HandFlow.Companion.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o dist-desktop/HandFlow",
+    "desktop:publish": "npm run build && dotnet publish companion/HandFlow.Companion/HandFlow.Companion.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o release/HandFlow-win-x64",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run"

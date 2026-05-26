@@ -30,7 +30,7 @@ npm run desktop:publish
 HandFlow ships as a local-first Windows desktop app. The embedded web UI, webcam capture, MediaPipe inference, and native pointer bridge all run on the same device.
 
 - Build with `npm run desktop:publish`.
-- Launch `dist-desktop/HandFlow/HandFlow.Companion.exe`.
+- Launch `release/HandFlow-win-x64/HandFlow.Companion.exe`.
 - Choose webcam, press `Start`, then enable the mouse-pointer button in the bottom dock.
 - Open palm moves the OS pointer.
 - Pinch down starts click/drag.
@@ -41,5 +41,5 @@ No webcam frame leaves the device. Browser runtime only sends local WebSocket co
 
 ## GitHub Hygiene
 
-- Do not commit `dist/`, `dist-desktop/`, `node_modules/`, `companion/**/bin/`, `companion/**/obj/`, or `*.WebView2/`.
+- Do not commit `dist/`, `dist-desktop/`, `release/`, `node_modules/`, `companion/**/bin/`, `companion/**/obj/`, or `*.WebView2/`.
 - Publish binaries through GitHub Releases, not git history.

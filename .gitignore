@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 dist-desktop
+release
 *.local
 .codex
 AGENTS.md
