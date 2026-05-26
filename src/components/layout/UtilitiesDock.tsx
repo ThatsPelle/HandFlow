@@ -10,6 +10,7 @@ interface UtilitiesDockProps {
   devices: WebcamDevice[]
   isMirrored: boolean
   nativePointerEnabled: boolean
+  onOpenDeviceMenu: () => Promise<void> | void
   onSelectDevice: (deviceId: string) => void
   onStart: () => void
   onStop: () => void
@@ -26,6 +27,7 @@ export function UtilitiesDock({
   devices,
   isMirrored,
   nativePointerEnabled,
+  onOpenDeviceMenu,
   onSelectDevice,
   onStart,
   onStop,
@@ -51,6 +53,7 @@ export function UtilitiesDock({
           buttonRef={cameraButtonRef}
           devices={devices}
           isBusy={isBusy}
+          onOpen={onOpenDeviceMenu}
           onSelect={onSelectDevice}
           selectedDeviceId={selectedDeviceId}
         />

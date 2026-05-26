@@ -89,6 +89,7 @@ export function HandFlowPage() {
             cameraButtonRef={cameraButtonRef}
             devices={webcam.devices}
             isMirrored={webcam.isMirrored}
+            onOpenDeviceMenu={webcam.prepareDeviceSelection}
             onSelectDevice={webcam.selectDevice}
             onStart={webcam.start}
             onStop={webcam.stop}

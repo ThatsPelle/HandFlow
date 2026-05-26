@@ -3,6 +3,7 @@ import type { WebcamState } from '../types/tracking'
 import {
   attachStreamToVideo,
   describeWebcamError,
+  ensureVideoDeviceLabels,
   listVideoInputDevices,
   requestWebcamStream,
   stopMediaStream,
@@ -35,6 +36,22 @@ export function useWebcam() {
       setState((current) => ({ ...current, devices: [], selectedDeviceId: null }))
     }
   }, [])
+
+  const prepareDeviceSelection = useCallback(async () => {
+    try {
+      const devices = await ensureVideoDeviceLabels()
+      setState((current) => ({
+        ...current,
+        devices,
+        selectedDeviceId:
+          current.selectedDeviceId && devices.some((device) => device.deviceId === current.selectedDeviceId)
+            ? current.selectedDeviceId
+            : devices[0]?.deviceId ?? null,
+      }))
+    } catch {
+      await refreshDevices()
+    }
+  }, [refreshDevices])
 
   const stop = useCallback(() => {
     stopMediaStream(streamRef.current)
@@ -83,6 +100,7 @@ export function useWebcam() {
 
   return {
     ...state,
+    prepareDeviceSelection,
     refreshDevices,
     selectDevice,
     start,

@@ -8,6 +8,7 @@ interface WebcamDeviceButtonProps {
   buttonRef?: RefObject<HTMLButtonElement | null>
   devices: WebcamDevice[]
   isBusy: boolean
+  onOpen?: () => Promise<void> | void
   selectedDeviceId: string | null
   onSelect: (deviceId: string) => void
 }
@@ -16,11 +17,13 @@ export function WebcamDeviceButton({
   buttonRef,
   devices,
   isBusy,
+  onOpen,
   selectedDeviceId,
   onSelect,
 }: WebcamDeviceButtonProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [isPreparing, setIsPreparing] = useState(false)
   const selectedDevice = devices.find((device) => device.deviceId === selectedDeviceId) ?? null
 
   useEffect(() => {
@@ -57,12 +60,26 @@ export function WebcamDeviceButton({
             ? 'border-cyan-core/40 bg-cyan-core/12 text-cyan-soft'
             : 'border-white/10 bg-white/[0.04] text-slate-200',
         )}
-        disabled={isBusy}
-        onClick={() => setIsOpen((open) => !open)}
+        disabled={isBusy || isPreparing}
+        onClick={async () => {
+          if (isOpen) {
+            setIsOpen(false)
+            return
+          }
+
+          setIsPreparing(true)
+
+          try {
+            await onOpen?.()
+            setIsOpen(true)
+          } finally {
+            setIsPreparing(false)
+          }
+        }}
         title={selectedDevice ? `Webcam: ${selectedDevice.label}` : 'Select webcam'}
         type="button"
       >
-        <Camera className="h-4 w-4" />
+        <Camera className={cn('h-4 w-4', isPreparing && 'animate-pulse')} />
       </button>
 
       <AnimatePresence>

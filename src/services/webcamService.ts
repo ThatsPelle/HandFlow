@@ -68,6 +68,34 @@ export async function listVideoInputDevices(enumerateDevices = getBrowserEnumera
   })
 }
 
+export function hasHiddenVideoDeviceLabels(devices: WebcamDevice[]) {
+  return devices.some((device) => !device.label.startsWith('Camera '))
+    ? false
+    : devices.length > 0
+}
+
+export async function ensureVideoDeviceLabels({
+  enumerateDevices = getBrowserEnumerateDevices(),
+  getUserMedia = getBrowserGetUserMedia(),
+}: {
+  enumerateDevices?: EnumerateDevices | null
+  getUserMedia?: GetUserMedia | null
+} = {}) {
+  const devices = await listVideoInputDevices(enumerateDevices)
+
+  if (!hasHiddenVideoDeviceLabels(devices) || !getUserMedia) {
+    return devices
+  }
+
+  const stream = await getUserMedia(buildVideoConstraints())
+
+  try {
+    return await listVideoInputDevices(enumerateDevices)
+  } finally {
+    stopMediaStream(stream)
+  }
+}
+
 export async function requestWebcamStream(
   options: WebcamOptions & { getUserMedia?: GetUserMedia } = {},
 ) {

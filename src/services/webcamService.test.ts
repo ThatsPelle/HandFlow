@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
+  ensureVideoDeviceLabels,
   buildVideoConstraints,
   describeWebcamError,
   listVideoInputDevices,
@@ -58,6 +59,45 @@ describe('webcamService', () => {
       { deviceId: 'b', kind: 'videoinput', label: 'Front Cam' },
       { deviceId: 'c', kind: 'videoinput', label: 'Camera 2' },
     ])
+  })
+
+  it('hydrates real device labels by requesting temporary permission when needed', async () => {
+    const stop = vi.fn()
+    const tempStream = {
+      getTracks: () => [{ stop }],
+    } as unknown as MediaStream
+    const getUserMedia = vi.fn().mockResolvedValue(tempStream)
+    const enumerateDevices = vi
+      .fn()
+      .mockResolvedValueOnce([
+        { deviceId: 'cam-a', kind: 'videoinput', label: '' },
+        { deviceId: 'cam-b', kind: 'videoinput', label: '' },
+      ])
+      .mockResolvedValueOnce([
+        { deviceId: 'cam-a', kind: 'videoinput', label: 'Logitech Brio' },
+        { deviceId: 'cam-b', kind: 'videoinput', label: 'OBS Virtual Camera' },
+      ])
+
+    await expect(ensureVideoDeviceLabels({ enumerateDevices, getUserMedia })).resolves.toEqual([
+      { deviceId: 'cam-a', kind: 'videoinput', label: 'Logitech Brio' },
+      { deviceId: 'cam-b', kind: 'videoinput', label: 'OBS Virtual Camera' },
+    ])
+
+    expect(getUserMedia).toHaveBeenCalledTimes(1)
+    expect(stop).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not request a temporary stream when labels are already visible', async () => {
+    const getUserMedia = vi.fn()
+    const enumerateDevices = vi.fn().mockResolvedValue([
+      { deviceId: 'cam-a', kind: 'videoinput', label: 'Sony Alpha' },
+    ])
+
+    await expect(ensureVideoDeviceLabels({ enumerateDevices, getUserMedia })).resolves.toEqual([
+      { deviceId: 'cam-a', kind: 'videoinput', label: 'Sony Alpha' },
+    ])
+
+    expect(getUserMedia).not.toHaveBeenCalled()
   })
 
   it('stops every track when releasing webcam resources', () => {

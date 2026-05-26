@@ -30,13 +30,34 @@ export function OnboardingTour({ isOpen, onClose, onComplete, steps, targetRects
   const viewportWidth = typeof window === 'undefined' ? 1280 : window.innerWidth
   const viewportHeight = typeof window === 'undefined' ? 720 : window.innerHeight
   const cardWidth = Math.min(360, viewportWidth - 32)
+  const cardHeight = 214
   const defaultTop = Math.max(24, viewportHeight - 240)
+  const placeBelow = targetRect ? targetRect.bottom + cardHeight + 32 <= viewportHeight : true
   const cardLeft = targetRect
     ? clamp(targetRect.left + targetRect.width / 2 - cardWidth / 2, 16, viewportWidth - cardWidth - 16)
     : Math.max(16, (viewportWidth - cardWidth) / 2)
   const cardTop = targetRect
-    ? clamp(targetRect.bottom + 18, 24, Math.max(24, viewportHeight - 230))
+    ? placeBelow
+      ? clamp(targetRect.bottom + 24, 24, Math.max(24, viewportHeight - cardHeight - 24))
+      : clamp(targetRect.top - cardHeight - 24, 24, Math.max(24, viewportHeight - cardHeight - 24))
     : defaultTop
+  const leaderStart = targetRect
+    ? {
+        x: targetRect.left + targetRect.width / 2,
+        y: placeBelow ? targetRect.bottom + 6 : targetRect.top - 6,
+      }
+    : null
+  const leaderEnd = targetRect
+    ? {
+        x: clamp(cardLeft + cardWidth / 2, cardLeft + 32, cardLeft + cardWidth - 32),
+        y: placeBelow ? cardTop - 8 : cardTop + cardHeight + 8,
+      }
+    : null
+  const leaderMidY = leaderStart && leaderEnd ? (leaderStart.y + leaderEnd.y) / 2 : 0
+  const leaderPath =
+    leaderStart && leaderEnd
+      ? `M ${leaderStart.x} ${leaderStart.y} C ${leaderStart.x} ${leaderMidY}, ${leaderEnd.x} ${leaderMidY}, ${leaderEnd.x} ${leaderEnd.y}`
+      : null
 
   return (
     <AnimatePresence>
@@ -49,18 +70,34 @@ export function OnboardingTour({ isOpen, onClose, onComplete, steps, targetRects
         <div className="absolute inset-0 bg-[#02050ccc]/82 backdrop-blur-[2px]" />
 
         {targetRect ? (
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute rounded-xl border border-cyan-core/60 shadow-[0_0_0_9999px_rgba(2,5,12,0.58),0_0_42px_rgba(34,211,238,0.28)]"
-            initial={{ opacity: 0, scale: 0.96 }}
-            style={{
-              height: targetRect.height + 10,
-              left: targetRect.left - 5,
-              top: targetRect.top - 5,
-              width: targetRect.width + 10,
-            }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
-          />
+          <>
+            <motion.div
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute rounded-xl border border-cyan-core/60 shadow-[0_0_0_9999px_rgba(2,5,12,0.58),0_0_42px_rgba(34,211,238,0.28)]"
+              initial={{ opacity: 0, scale: 0.96 }}
+              style={{
+                height: targetRect.height + 10,
+                left: targetRect.left - 5,
+                top: targetRect.top - 5,
+                width: targetRect.width + 10,
+              }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            />
+            {leaderPath && leaderStart && leaderEnd ? (
+              <svg className="absolute inset-0 h-full w-full" data-testid="onboarding-leader-line">
+                <path
+                  d={leaderPath}
+                  fill="none"
+                  stroke="rgba(34, 211, 238, 0.92)"
+                  strokeDasharray="8 10"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                />
+                <circle cx={leaderStart.x} cy={leaderStart.y} fill="rgba(34, 211, 238, 0.96)" r="4" />
+                <circle cx={leaderEnd.x} cy={leaderEnd.y} fill="rgba(34, 211, 238, 0.96)" r="4" />
+              </svg>
+            ) : null}
+          </>
         ) : null}
 
         <motion.div
