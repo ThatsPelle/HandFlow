@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/handflow-banner.svg" alt="HandFlow banner" width="100%" />
+  <img src="docs/assets/handflow-banner.svg?raw=1&amp;v=20260527-1" alt="HandFlow banner" width="100%" />
 </p>
 
 <p align="center">
