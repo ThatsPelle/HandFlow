@@ -27,21 +27,14 @@
   </g>
 
   <text x="244" y="164" fill="white" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700">HandFlow</text>
-  <text x="246" y="210" fill="#8CF3FF" font-family="Consolas, Menlo, monospace" font-size="22" letter-spacing="6">LOCAL AI INTERACTION SYSTEM</text>
+  <text x="246" y="210" fill="#8CF3FF" font-family="Consolas, Menlo, monospace" font-size="22" letter-spacing="6">ON-DEVICE AI INTERACTION SYSTEM</text>
   <text x="246" y="276" fill="#D7E5F4" font-family="Segoe UI, Arial, sans-serif" font-size="28">
     Real-time hand tracking, gesture recognition, and native Windows cursor control.
   </text>
 
-  <g>
-    <rect x="246" y="314" width="144" height="40" rx="12" fill="#22D3EE" fill-opacity="0.16" stroke="#22D3EE" stroke-opacity="0.38"/>
-    <text x="274" y="339" fill="#9BEFFC" font-family="Consolas, Menlo, monospace" font-size="17">RUN TRACKING</text>
-
-    <rect x="408" y="314" width="124" height="40" rx="12" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.12"/>
-    <text x="440" y="339" fill="#D5E0EA" font-family="Consolas, Menlo, monospace" font-size="17">GESTURES</text>
-
-    <rect x="550" y="314" width="126" height="40" rx="12" fill="#A855F7" fill-opacity="0.14" stroke="#A855F7" stroke-opacity="0.28"/>
-    <text x="584" y="339" fill="#E1C7FF" font-family="Consolas, Menlo, monospace" font-size="17">POINTER</text>
-  </g>
+  <text x="248" y="336" fill="#AFC3D8" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    Webcam control. Gesture states. Windows pointer bridge.
+  </text>
 
   <defs>
     <linearGradient id="border" x1="0" y1="0" x2="1280" y2="420" gradientUnits="userSpaceOnUse">
