@@ -5,12 +5,12 @@
 <p align="center">
   <a href="https://github.com/ThatsPelle/HandFlow/releases"><img src="https://img.shields.io/badge/release-v0.1.0-22D3EE?style=for-the-badge&labelColor=08111D" alt="Release v0.1.0" /></a>
   <img src="https://img.shields.io/badge/platform-Windows-0B1320?style=for-the-badge&logo=windows&logoColor=white" alt="Windows desktop app" />
-  <img src="https://img.shields.io/badge/runtime-local--first-0B1320?style=for-the-badge&logo=shield&logoColor=74E8F8" alt="Local-first runtime" />
+  <img src="https://img.shields.io/badge/runtime-on--device-0B1320?style=for-the-badge&logo=shield&logoColor=74E8F8" alt="On-device runtime" />
   <img src="https://img.shields.io/badge/tracking-MediaPipe-0B1320?style=for-the-badge&logo=googlechrome&logoColor=74E8F8" alt="MediaPipe tracking" />
 </p>
 
 <p align="center">
-  Local-first desktop hand tracking with real-time webcam interaction, gesture recognition, and native Windows cursor control.
+  Desktop hand tracking with real-time webcam interaction, gesture recognition, and native Windows cursor control.
 </p>
 
 ## Overview
@@ -24,7 +24,7 @@ HandFlow is a futuristic webcam interaction app built with React, TypeScript, Vi
 | Realtime tracking | Webcam stream + MediaPipe Hands + smoothed overlay rendering |
 | Gesture engine | Pinch, open palm, and peace sign with stabilized state transitions |
 | Native desktop control | Open palm to move pointer, pinch to click and drag on Windows |
-| Local-first posture | No backend, no cloud inference, no server-side webcam handling |
+| On-device processing | No backend, no cloud inference, no server-side webcam handling |
 | Desktop shell | WebView2 host, local static server, tray integration, exit confirmation |
 
 ## Quick Start
@@ -62,7 +62,7 @@ release/HandFlow-win-x64/HandFlow.Companion.exe
 5. Use open palm to move and pinch to click or drag.
 6. Press `Ctrl+Alt+H` to pause or resume native pointer control.
 
-## Local-First Posture
+## On-Device Processing
 
 Webcam frames are captured with browser APIs and remain on the user device. MediaPipe WASM and the hand landmark model are served from `public/mediapipe`, so runtime hand tracking does not require a backend, external AI API, cloud transport, or server-side video processing.
 
