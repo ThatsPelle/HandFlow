@@ -16,13 +16,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3537.50" />
   </ItemGroup>
-  <ItemGroup>
-    <WebDist Include="..\..\dist\**\*.*" />
-  </ItemGroup>
   <Target Name="CopyWebDistOnBuild" AfterTargets="Build" Condition="Exists('..\..\dist')">
+    <ItemGroup>
+      <WebDist Include="..\..\dist\**\*.*" />
+    </ItemGroup>
     <Copy SourceFiles="@(WebDist)" DestinationFiles="@(WebDist->'$(OutDir)web\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Target Name="CopyWebDistOnPublish" AfterTargets="Publish" Condition="Exists('..\..\dist')">
+    <ItemGroup>
+      <WebDist Include="..\..\dist\**\*.*" />
+    </ItemGroup>
     <Copy SourceFiles="@(WebDist)" DestinationFiles="@(WebDist->'$(PublishDir)web\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Target Name="RemoveUnusedWebView2WpfReference" BeforeTargets="ResolveAssemblyReferences">

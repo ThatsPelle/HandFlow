@@ -58,6 +58,7 @@ export function OnboardingTour({ isOpen, onClose, onComplete, steps, targetRects
     leaderStart && leaderEnd
       ? `M ${leaderStart.x} ${leaderStart.y} C ${leaderStart.x} ${leaderMidY}, ${leaderEnd.x} ${leaderMidY}, ${leaderEnd.x} ${leaderEnd.y}`
       : null
+  const spotlightRadius = 10
 
   return (
     <AnimatePresence>
@@ -67,19 +68,49 @@ export function OnboardingTour({ isOpen, onClose, onComplete, steps, targetRects
         initial={{ opacity: 0 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
       >
-        <div className="absolute inset-0 bg-[#02050ccc]/82 backdrop-blur-[2px]" />
+        {targetRect ? (
+          <>
+            <div
+              className="absolute left-0 right-0 top-0 bg-[#02050ccc] backdrop-blur-[3px]"
+              style={{ height: Math.max(0, targetRect.top) }}
+            />
+            <div
+              className="absolute left-0 top-0 bg-[#02050ccc] backdrop-blur-[3px]"
+              style={{
+                height: targetRect.height,
+                top: targetRect.top,
+                width: Math.max(0, targetRect.left),
+              }}
+            />
+            <div
+              className="absolute right-0 top-0 bg-[#02050ccc] backdrop-blur-[3px]"
+              style={{
+                height: targetRect.height,
+                top: targetRect.top,
+                width: Math.max(0, viewportWidth - targetRect.right),
+              }}
+            />
+            <div
+              className="absolute bottom-0 left-0 right-0 bg-[#02050ccc] backdrop-blur-[3px]"
+              style={{ height: Math.max(0, viewportHeight - targetRect.bottom) }}
+            />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-[#02050ccc] backdrop-blur-[3px]" />
+        )}
 
         {targetRect ? (
           <>
             <motion.div
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute rounded-xl border border-cyan-core/60 shadow-[0_0_0_9999px_rgba(2,5,12,0.58),0_0_42px_rgba(34,211,238,0.28)]"
+              className="absolute border border-cyan-core/70 bg-transparent shadow-[0_0_24px_rgba(34,211,238,0.3)]"
               initial={{ opacity: 0, scale: 0.96 }}
               style={{
-                height: targetRect.height + 10,
-                left: targetRect.left - 5,
-                top: targetRect.top - 5,
-                width: targetRect.width + 10,
+                borderRadius: spotlightRadius,
+                height: targetRect.height,
+                left: targetRect.left,
+                top: targetRect.top,
+                width: targetRect.width,
               }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
             />

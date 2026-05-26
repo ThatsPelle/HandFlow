@@ -17,8 +17,8 @@ const toneClasses = {
 
 export function HudMetric({ icon, label, tone = 'cyan', value }: HudMetricProps) {
   return (
-    <div className="hud-line rounded border border-white/10 bg-white/[0.035] p-3 pl-4">
-      <div className="mb-2 flex items-center justify-between gap-3">
+    <div className="hud-line rounded border border-white/10 bg-white/[0.035] px-3 py-2.5">
+      <div className="mb-1.5 flex items-center justify-between gap-3">
         <span className="font-mono text-[10px] uppercase text-slate-400">{label}</span>
         {icon ? <span className={toneClasses[tone]}>{icon}</span> : null}
       </div>

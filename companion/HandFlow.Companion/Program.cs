@@ -31,6 +31,7 @@ internal static class Program
 internal sealed class HandFlowTrayContext : ApplicationContext
 {
     private readonly CancellationTokenSource cts = new();
+    private readonly Icon appIcon;
     private readonly NotifyIcon notifyIcon;
     private readonly HandFlowAppForm appForm;
     private readonly PointerServer server;
@@ -40,13 +41,14 @@ internal sealed class HandFlowTrayContext : ApplicationContext
 
     public HandFlowTrayContext()
     {
+        appIcon = HandFlowIcon.Create();
         staticFileServer = new StaticFileServer(Path.Combine(AppContext.BaseDirectory, "web"));
         server = new PointerServer(() => enabled);
         hotkeyWindow = new HotkeyWindow(ToggleEnabled);
-        appForm = new HandFlowAppForm(staticFileServer.AppUrl, ExitThread);
+        appForm = new HandFlowAppForm(staticFileServer.AppUrl, ExitThread, appIcon);
         notifyIcon = new NotifyIcon
         {
-            Icon = SystemIcons.Application,
+            Icon = appIcon,
             Text = "HandFlow",
             Visible = true,
             ContextMenuStrip = BuildMenu(),
@@ -100,6 +102,7 @@ internal sealed class HandFlowTrayContext : ApplicationContext
         staticFileServer.Dispose();
         notifyIcon.Visible = false;
         notifyIcon.Dispose();
+        appIcon.Dispose();
         cts.Dispose();
         base.ExitThreadCore();
     }
@@ -306,4 +309,8 @@ internal static partial class NativeMethods
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool UnregisterHotKey(IntPtr windowHandle, int id);
+
+    [LibraryImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool DestroyIcon(IntPtr iconHandle);
 }

@@ -20,7 +20,7 @@ export function StatusPanel({ error, telemetry }: StatusPanelProps) {
   return (
     <motion.aside
       animate={{ opacity: 1, x: 0 }}
-      className="glass-panel flex min-h-[360px] flex-col rounded-lg p-4 lg:h-[calc(100svh-13rem)] lg:min-h-[420px]"
+      className="glass-panel flex min-h-[360px] flex-col rounded-lg p-4 lg:sticky lg:top-4 lg:max-h-[calc(100svh-8rem)] lg:self-start"
       initial={{ opacity: 0, x: 18 }}
       transition={{ duration: 0.45, ease: 'easeOut', delay: 0.08 }}
     >
@@ -34,54 +34,56 @@ export function StatusPanel({ error, telemetry }: StatusPanelProps) {
         </span>
       </div>
 
-      <div className="grid gap-3">
-        <HudMetric icon={<Activity className="h-4 w-4" />} label="Render loop" value={formatFps(telemetry.fps)} />
-        <HudMetric
-          icon={<Hand className="h-4 w-4" />}
-          label="Hand detection"
-          tone={handIsDetected ? 'green' : streamIsLive ? 'cyan' : 'amber'}
-          value={telemetry.detectionStatus.replace('-', ' ')}
-        />
-        <HudMetric
-          icon={<Gauge className="h-4 w-4" />}
-          label="Confidence"
-          tone={handIsDetected ? 'green' : 'amber'}
-          value={confidence}
-        />
-        <HudMetric label="Landmarks" tone="cyan" value={`${telemetry.landmarkCount}/21`} />
-        <HudMetric
-          icon={<Radio className="h-4 w-4" />}
-          label="Tracking state"
-          tone={streamIsLive ? 'cyan' : 'violet'}
-          value={telemetry.trackingState.replace('-', ' ')}
-        />
-        <HudMetric
-          label="Active hand"
-          tone="violet"
-          value={telemetry.handedness ?? telemetry.activeGesture.replace('-', ' ')}
-        />
-        <HudMetric
-          label="Gesture"
-          tone={telemetry.activeGesture === 'none' ? 'amber' : 'violet'}
-          value={telemetry.activeGesture.replace('-', ' ')}
-        />
-        <HudMetric label="Gesture state" tone="cyan" value={telemetry.gesturePhase} />
-        <HudMetric label="Gesture confidence" tone="green" value={gestureConfidence} />
-      </div>
-
-      <div className="mt-5 rounded border border-white/10 bg-black/20 p-4">
-        <div className="mb-3 flex items-center gap-2 font-mono text-[11px] uppercase text-emerald-200">
-          <WifiOff className="h-4 w-4" />
-          Offline posture
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
+        <div className="grid gap-3">
+          <HudMetric icon={<Activity className="h-4 w-4" />} label="Render loop" value={formatFps(telemetry.fps)} />
+          <HudMetric
+            icon={<Hand className="h-4 w-4" />}
+            label="Hand detection"
+            tone={handIsDetected ? 'green' : streamIsLive ? 'cyan' : 'amber'}
+            value={telemetry.detectionStatus.replace('-', ' ')}
+          />
+          <HudMetric
+            icon={<Gauge className="h-4 w-4" />}
+            label="Confidence"
+            tone={handIsDetected ? 'green' : 'amber'}
+            value={confidence}
+          />
+          <HudMetric label="Landmarks" tone="cyan" value={`${telemetry.landmarkCount}/21`} />
+          <HudMetric
+            icon={<Radio className="h-4 w-4" />}
+            label="Tracking state"
+            tone={streamIsLive ? 'cyan' : 'violet'}
+            value={telemetry.trackingState.replace('-', ' ')}
+          />
+          <HudMetric
+            label="Active hand"
+            tone="violet"
+            value={telemetry.handedness ?? telemetry.activeGesture.replace('-', ' ')}
+          />
+          <HudMetric
+            label="Gesture"
+            tone={telemetry.activeGesture === 'none' ? 'amber' : 'violet'}
+            value={telemetry.activeGesture.replace('-', ' ')}
+          />
+          <HudMetric label="Gesture state" tone="cyan" value={telemetry.gesturePhase} />
+          <HudMetric label="Gesture confidence" tone="green" value={gestureConfidence} />
         </div>
-        <p className="text-sm leading-6 text-slate-300">{LOCAL_PRIVACY_POSTURE}</p>
-      </div>
 
-      {error || telemetry.trackingError ? (
-        <div className="mt-3 rounded border border-signal-rose/30 bg-signal-rose/10 p-3 text-sm text-rose-100">
-          {error ?? telemetry.trackingError}
+        <div className="rounded border border-white/10 bg-black/20 p-4">
+          <div className="mb-3 flex items-center gap-2 font-mono text-[11px] uppercase text-emerald-200">
+            <WifiOff className="h-4 w-4" />
+            Offline posture
+          </div>
+          <p className="text-sm leading-6 text-slate-300">{LOCAL_PRIVACY_POSTURE}</p>
         </div>
-      ) : null}
+
+        {error || telemetry.trackingError ? (
+          <div className="rounded border border-signal-rose/30 bg-signal-rose/10 p-3 text-sm text-rose-100">
+            {error ?? telemetry.trackingError}
+          </div>
+        ) : null}
+      </div>
     </motion.aside>
   )
 }

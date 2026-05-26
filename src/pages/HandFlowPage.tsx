@@ -60,19 +60,59 @@ export function HandFlowPage() {
       return
     }
 
+    let frame = 0
+    let disposed = false
+
     function updateRects() {
-      setOnboardingRects({
+      const nextRects = {
         camera: cameraButtonRef.current?.getBoundingClientRect(),
         pointer: pointerButtonRef.current?.getBoundingClientRect(),
         run: startButtonRef.current?.getBoundingClientRect(),
-      })
+      }
+
+      if (!disposed) {
+        setOnboardingRects((current) => {
+          const currentCamera = current.camera
+          const nextCamera = nextRects.camera
+          const currentPointer = current.pointer
+          const nextPointer = nextRects.pointer
+          const currentRun = current.run
+          const nextRun = nextRects.run
+
+          const unchanged =
+            currentCamera?.x === nextCamera?.x &&
+            currentCamera?.y === nextCamera?.y &&
+            currentCamera?.width === nextCamera?.width &&
+            currentCamera?.height === nextCamera?.height &&
+            currentPointer?.x === nextPointer?.x &&
+            currentPointer?.y === nextPointer?.y &&
+            currentPointer?.width === nextPointer?.width &&
+            currentPointer?.height === nextPointer?.height &&
+            currentRun?.x === nextRun?.x &&
+            currentRun?.y === nextRun?.y &&
+            currentRun?.width === nextRun?.width &&
+            currentRun?.height === nextRun?.height
+
+          return unchanged ? current : nextRects
+        })
+      }
+    }
+
+    function syncLoop() {
+      updateRects()
+      frame = window.requestAnimationFrame(syncLoop)
     }
 
     updateRects()
+    frame = window.requestAnimationFrame(syncLoop)
     window.addEventListener('resize', updateRects)
+    window.addEventListener('scroll', updateRects, true)
 
     return () => {
+      disposed = true
+      window.cancelAnimationFrame(frame)
       window.removeEventListener('resize', updateRects)
+      window.removeEventListener('scroll', updateRects, true)
     }
   }, [isOnboardingOpen])
 

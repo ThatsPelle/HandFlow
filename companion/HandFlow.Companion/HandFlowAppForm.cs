@@ -9,7 +9,7 @@ internal sealed class HandFlowAppForm : Form
     private readonly Action requestExit;
     private readonly WebView2 webView = new();
 
-    public HandFlowAppForm(string appUrl, Action requestExit)
+    public HandFlowAppForm(string appUrl, Action requestExit, Icon appIcon)
     {
         this.appUrl = appUrl;
         this.requestExit = requestExit;
@@ -18,7 +18,7 @@ internal sealed class HandFlowAppForm : Form
         MinimumSize = new Size(960, 640);
         Size = new Size(1280, 820);
         BackColor = Color.FromArgb(5, 7, 13);
-        Icon = SystemIcons.Application;
+        Icon = appIcon;
 
         webView.AllowExternalDrop = false;
         webView.BackColor = Color.FromArgb(5, 7, 13);

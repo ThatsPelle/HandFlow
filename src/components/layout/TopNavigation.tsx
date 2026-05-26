@@ -1,13 +1,12 @@
-import { Activity, Cpu, ShieldCheck } from 'lucide-react'
+import { Cpu, ShieldCheck } from 'lucide-react'
 import { APP_NAME, APP_TAGLINE, APP_VERSION } from '../../config/appMeta'
+import { HandFlowMark } from './HandFlowMark'
 
 export function TopNavigation() {
   return (
     <header className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
       <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded border border-cyan-core/40 bg-cyan-core/10 shadow-glow">
-          <Activity className="h-5 w-5 text-cyan-soft" />
-        </div>
+        <HandFlowMark />
         <div>
           <p className="font-display text-lg font-semibold text-white">{APP_NAME}</p>
           <p className="font-mono text-[11px] uppercase text-cyan-soft/80">{APP_TAGLINE}</p>
